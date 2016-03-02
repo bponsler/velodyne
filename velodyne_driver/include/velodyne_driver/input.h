@@ -33,8 +33,11 @@
 
 #include <unistd.h>
 #include <stdio.h>
-#include <pcap.h>
 #include <netinet/in.h>
+
+#ifndef DISABLE_PCAP
+#include <pcap.h>
+#endif
 
 #include <ros/ros.h>
 #include <velodyne_msgs/VelodynePacket.h>
@@ -86,6 +89,7 @@ namespace velodyne_driver
   };
 
 
+#ifndef DISABLE_PCAP
   /** @brief Velodyne input from PCAP dump file.
    *
    * Dump files can be grabbed by libpcap, Velodyne's DSR software,
@@ -118,6 +122,7 @@ namespace velodyne_driver
     ros::Rate packet_rate_;
     bpf_program velodyne_pointdata_filter_;
   };
+#endif
 
 } // velodyne_driver namespace
 

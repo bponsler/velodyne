@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(velodyne_driver)
 
-set(${PROJECT_NAME}_CATKIN_DEPS 
+set(${PROJECT_NAME}_CATKIN_DEPS
     diagnostic_updater
     nodelet
     roscpp
@@ -14,7 +14,11 @@ find_package(catkin REQUIRED COMPONENTS ${${PROJECT_NAME}_CATKIN_DEPS})
 find_package(Boost REQUIRED COMPONENTS thread)
 
 # libpcap provides no pkg-config or find_package module:
-set(libpcap_LIBRARIES -lpcap)
+IF(NOT DEFINED DISABLE_PCAP)
+  set(libpcap_LIBRARIES -lpcap)
+ELSE(NOT DEFINED DISABLE_PCAP)
+  set(libpcap_LIBRARIES -lpcap)
+ENDIF(NOT DEFINED DISABLE_PCAP)
 
 include_directories(include ${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS})
 
@@ -59,7 +63,7 @@ if (CATKIN_ENABLE_TESTING)
     http://download.ros.org/data/velodyne/vlp16.pcap
     DESTINATION ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/tests
     MD5 f45c2bb1d7ee358274e423ea3b66fd73)
-  
+
   # unit tests
   add_rostest(tests/pcap_node_hertz.test)
   add_rostest(tests/pcap_nodelet_hertz.test)
@@ -67,7 +71,7 @@ if (CATKIN_ENABLE_TESTING)
   add_rostest(tests/pcap_32e_nodelet_hertz.test)
   add_rostest(tests/pcap_vlp16_node_hertz.test)
   add_rostest(tests/pcap_vlp16_nodelet_hertz.test)
-  
+
   # parse check all the launch/*.launch files
   roslaunch_add_file_check(launch)
 
